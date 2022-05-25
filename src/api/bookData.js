@@ -35,7 +35,7 @@ const updateBook = () => {};
 
 // TODO: FILTER BOOKS ON SALE
 const booksOnSale = () => new Promise((resolve, reject) => {
-  axios.get(`${dbUrl}/bboks.json?orderBy="sale"&equalTo=true`)
+  axios.get(`${dbUrl}/books.json?orderBy="sale"&equalTo=true`)
     .then((response) => resolve(Object.values(response.data)))
     .catch((error) => reject(error));
 });
