@@ -31,5 +31,5 @@ const deleteAuthorBooks = (authorId) => new Promise((resolve, reject) => {
   }).catch((error) => reject(error));
 });
 export {
-  viewBookDetails, viewAuthorDetails, deleteAuthorBooks, getAuthorBooks 
+  viewBookDetails, viewAuthorDetails, deleteAuthorBooks, getAuthorBooks
 };
