@@ -1,26 +1,66 @@
-// import axios from 'axios';
-// import firebaseConfig from './apiKeys';
+import axios from 'axios';
+import firebaseConfig from './apiKeys';
 // API CALLS FOR BOOKS
 
-// const dbUrl = firebaseConfig.databaseURL;
+const dbUrl = firebaseConfig.databaseURL;
 
 // TODO: GET BOOKS
-const getBooks = () => {};
+const getBooks = () => new Promise((resolve, reject) => {
+  axios.get(`${dbUrl}/books.json`)
+    .then((response) => resolve(Object.values(response.data)))
+    .catch((error) => reject(error));
+});
 
 // TODO: DELETE BOOK
-const deleteBook = () => {};
+const deleteBook = (firebaseKey) => new Promise((resolve, reject) => {
+  axios.delete(`${dbUrl}/books/${firebaseKey}.json`)
+    .then(() => {
+      getBooks().then((booksArray) => resolve(booksArray));
+    })
+    .catch((error) => reject(error));
+});
 
 // TODO: GET SINGLE BOOK
-const getSingleBook = () => {};
+const getSingleBook = (firebaseKey) => new Promise((resolve, reject) => {
+  axios.get(`${dbUrl}/books/${firebaseKey}.json`)
+    .then((response) => resolve(response.data))
+    .catch((error) => reject(error));
+});
 
 // TODO: CREATE BOOK
-const createBook = () => {};
+const createBook = (bookObj) => new Promise((resolve, reject) => {
+  axios.post(`${dbUrl}/books.json`, bookObj)
+    .then((response) => {
+      const payload = { firebaseKey: response.data.name };
+      axios.patch(`${dbUrl}/books/${response.data.name}.json`, payload)
+        .then(() => {
+          getBooks().then(resolve);
+        });
+    }).catch(reject);
+});
 
 // TODO: UPDATE BOOK
-const updateBook = () => {};
+const updateBook = (bookObj) => new Promise((resolve, reject) => {
+  axios.post(`${dbUrl}/books/${bookObj.firebaseKey}.json`, bookObj)
+    .then(() => getBooks().then(resolve))
+    .catch(reject);
+});
 
 // TODO: FILTER BOOKS ON SALE
-const booksOnSale = () => {};
+const booksOnSale = () => new Promise((resolve, reject) => {
+  axios.get(`${dbUrl}/books.json?orderBy="sale"&equalTo=true`)
+    .then((response) => resolve(Object.values(response.data)))
+    .catch((error) => reject(error));
+});
+
+/* const booksOnSale = (uid) => new Promise((resolve, reject) => {
+  getBooks(uid)
+    .then((userBooks) => {
+      const favBooks = userBooks.filter((book) => book.sale);
+      resolve(favBooks);
+    })
+    .catch((error) => reject(error));
+}); */
 
 // TODO: STRETCH...SEARCH BOOKS
 
@@ -30,5 +70,5 @@ export {
   booksOnSale,
   deleteBook,
   getSingleBook,
-  updateBook
+  updateBook,
 };
