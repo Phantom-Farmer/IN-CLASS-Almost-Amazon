@@ -12,7 +12,7 @@ const getAuthors = () => new Promise((resolve, reject) => {
 
 // FIXME: CREATE AUTHOR
 const createAuthor = (authorObject) => new Promise((resolve, reject) => {
-  axios.post(`${dbUrl}/authors.json`, authorObject)
+  axios.post(`${dbUrl}/authors.json?`, authorObject)
     .then((response) => {
       const payload = { firebaseKey: response.data.name };
       axios.patch(`${dbUrl}/authors/${response.data.name}.json`, payload).then(() => {
@@ -40,8 +40,7 @@ const deleteSingleAuthor = (firebaseKey) => new Promise((resolve, reject) => {
 // FIXME: UPDATE AUTHOR
 const updateAuthor = (authorObject) => new Promise((resolve, reject) => {
   axios.patch(`${dbUrl}/authors/${authorObject.firebaseKey}.json`, authorObject)
-    .then(() => getAuthors(authorObject))
-    .then(resolve)
+    .then(() => getAuthors(authorObject)).then(resolve)
     .catch(reject);
 });
 
@@ -53,6 +52,15 @@ const getAuthorBooks = (firebaseKey) => new Promise((resolve, reject) => {
 });
 
 // TODO: FILTER favorite authors
+/* const favAuthors = (uid) => new Promise((resolve, reject) => {
+  getAuthors(uid)
+    .then((userAuthors) => {
+      const favUserAuthors = userAuthors.filter((author) => author.favorite);
+      resolve(favUserAuthors);
+    })
+    .catch((error) => reject(error));
+}); */
+
 const favAuthors = () => new Promise((resolve, reject) => {
   axios.get(`${dbUrl}/authors.json?orderBy="favorite"&equalTo=true`)
     .then((response) => resolve(Object.values(response.data)))

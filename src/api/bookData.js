@@ -53,6 +53,15 @@ const booksOnSale = () => new Promise((resolve, reject) => {
     .catch((error) => reject(error));
 });
 
+/* const booksOnSale = (uid) => new Promise((resolve, reject) => {
+  getBooks(uid)
+    .then((userBooks) => {
+      const favBooks = userBooks.filter((book) => book.sale);
+      resolve(favBooks);
+    })
+    .catch((error) => reject(error));
+}); */
+
 // TODO: STRETCH...SEARCH BOOKS
 
 export {
