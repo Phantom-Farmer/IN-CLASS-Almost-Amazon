@@ -5,24 +5,24 @@ import signOut from '../helpers/auth/signOut';
 import { showAuthors, emptyAuthors } from '../components/pages/authors';
 
 // navigation events
-const navigationEvents = () => {
+const navigationEvents = (uid) => {
   // LOGOUT BUTTON
   document.querySelector('#logout-button')
     .addEventListener('click', signOut);
 
   // TODO: BOOKS ON SALE
   document.querySelector('#sale-books').addEventListener('click', () => {
-    booksOnSale().then((saleBooksArray) => showBooks(saleBooksArray));
+    booksOnSale(uid).then((saleBooksArray) => showBooks(saleBooksArray));
   });
 
   // TODO: ALL BOOKS
   document.querySelector('#all-books').addEventListener('click', () => {
-    getBooks().then((booksArray) => showBooks(booksArray));
+    getBooks(uid).then((booksArray) => showBooks(booksArray));
   });
 
   // TODO: favorite authors
   document.querySelector('#favi').addEventListener('click', () => {
-    favAuthors().then((favAuthorsArray) => showAuthors(favAuthorsArray));
+    favAuthors(uid).then((favAuthorsArray) => showAuthors(favAuthorsArray));
   });
 
   // FIXME: STUDENTS Create an event listener for the Authors

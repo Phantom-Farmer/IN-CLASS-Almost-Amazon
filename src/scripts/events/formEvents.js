@@ -3,7 +3,7 @@ import { showBooks } from '../components/pages/books';
 import { showAuthors } from '../components/pages/authors';
 import { updateAuthor } from '../../api/authorData';
 
-const formEvents = () => {
+const formEvents = (uid) => {
   document.querySelector('#main-container').addEventListener('submit', (e) => {
     e.preventDefault();
     // TODO: CLICK EVENT FOR SUBMITTING FORM FOR ADDING A BOOK
@@ -15,6 +15,7 @@ const formEvents = () => {
         description: document.querySelector('#description').value,
         sale: document.querySelector('#sale').value,
         author_id: document.querySelector('#author_id').value,
+        uid
       };
 
       createBook(bookObject).then((booksArray) => showBooks(booksArray));
@@ -43,6 +44,7 @@ const formEvents = () => {
         favorite: document.querySelector('#favorite').value,
         first_name: document.querySelector('#first_name').value,
         last_name: document.querySelector('#last_name').value,
+        uid
       };
       updateAuthor(authorObject).then(showAuthors);
     }
@@ -58,6 +60,8 @@ const formEvents = () => {
         firebaseKey
       };
       updateAuthor(authorObject).then(showAuthors);
+      /* updateAuthor(authorObject).then(() => {
+        getAuthors(uid).then((response) => showAuthors(response)) */
     }
   });
 };

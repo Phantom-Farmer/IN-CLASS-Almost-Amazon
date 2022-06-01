@@ -4,9 +4,15 @@ import firebaseConfig from './apiKeys';
 const dbUrl = firebaseConfig.databaseURL;
 
 // FIXME:  GET ALL AUTHORS
-const getAuthors = () => new Promise((resolve, reject) => {
-  axios.get(`${dbUrl}/authors.json`)
-    .then((response) => resolve(Object.values(response.data)))
+const getAuthors = (uid) => new Promise((resolve, reject) => {
+  axios.get(`${dbUrl}/authors.json?orderBy="uid"&equalTo="${uid}"`)
+    .then((response) => {
+      if (response.data) {
+        resolve(Object.values(response.data));
+      } else {
+        resolve([]);
+      }
+    })
     .catch((error) => reject(error));
 });
 
@@ -46,20 +52,10 @@ const updateAuthor = (authorObject) => new Promise((resolve, reject) => {
 
 // TODO: GET A SINGLE AUTHOR'S BOOKS
 const getAuthorBooks = (firebaseKey) => new Promise((resolve, reject) => {
-  axios.get(`${dbUrl}/books.json?orderBy="author_id"&equalTo="${firebaseKey}"`)
-    .then((response) => resolve(Object.values(response.data)))
+  axios.get(`${dbUrl}/books.json?orderBy="author_id"&equalTo=${firebaseKey}`)
+    .then((response) => resolve(response.data))
     .catch((error) => reject(error));
 });
-
-// TODO: FILTER favorite authors
-/* const favAuthors = (uid) => new Promise((resolve, reject) => {
-  getAuthors(uid)
-    .then((userAuthors) => {
-      const favUserAuthors = userAuthors.filter((author) => author.favorite);
-      resolve(favUserAuthors);
-    })
-    .catch((error) => reject(error));
-}); */
 
 const favAuthors = () => new Promise((resolve, reject) => {
   axios.get(`${dbUrl}/authors.json?orderBy="favorite"&equalTo=true`)
