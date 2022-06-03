@@ -1,7 +1,7 @@
 import { createBook, updateBook } from '../../api/bookData';
 import { showBooks } from '../components/pages/books';
 import { showAuthors } from '../components/pages/authors';
-import { updateAuthor } from '../../api/authorData';
+import { updateAuthor, createAuthor } from '../../api/authorData';
 
 const formEvents = (uid) => {
   document.querySelector('#main-container').addEventListener('submit', (e) => {
@@ -46,7 +46,9 @@ const formEvents = (uid) => {
         last_name: document.querySelector('#last_name').value,
         uid
       };
-      updateAuthor(authorObject).then(showAuthors);
+      createAuthor(authorObject, uid).then((authorsArray) => {
+        showAuthors(authorsArray);
+      });
     }
 
     // FIXME:ADD CLICK EVENT FOR EDITING AN AUTHOR

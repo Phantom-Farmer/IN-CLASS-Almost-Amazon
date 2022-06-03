@@ -24,9 +24,8 @@ const viewAuthorDetails = (authorFirebaseKey) => new Promise((resolve, reject) =
 const deleteAuthorBooks = (authorId) => new Promise((resolve, reject) => {
   getAuthorBooks(authorId).then((booksArray) => {
     const deleteBookPromises = booksArray.map((book) => deleteBook(book.firebaseKey));
-
     Promise.all(deleteBookPromises).then(() => {
-      deleteSingleAuthor(authorId).then(resolve);
+      resolve(deleteSingleAuthor(authorId));
     });
   }).catch((error) => reject(error));
 });

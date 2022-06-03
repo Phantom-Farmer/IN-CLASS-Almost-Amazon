@@ -2,12 +2,12 @@ import { deleteBook, getSingleBook } from '../../api/bookData';
 import { viewBookDetails, viewAuthorDetails, deleteAuthorBooks } from '../../api/mergedData';
 import { showBooks } from '../components/pages/books';
 import viewBook from '../components/pages/viewBook';
-import { viewAuthor, showAuthors } from '../components/pages/authors';
+import { showAuthors, viewAuthor } from '../components/pages/authors';
 import addBookForm from '../components/forms/addBookForm';
 import addAuthorForm from '../components/forms/addAuthorForm';
-import { getSingleAuthor } from '../../api/authorData';
+import { getAuthors, getSingleAuthor } from '../../api/authorData';
 
-const domEvents = () => {
+const domEvents = (uid) => {
   document.querySelector('#main-container').addEventListener('click', (e) => {
     // TODO: CLICK EVENT FOR DELETING A BOOK
     if (e.target.id.includes('delete-book')) {
@@ -21,7 +21,7 @@ const domEvents = () => {
 
     // TODO: CLICK EVENT FOR SHOWING FORM FOR ADDING A BOOK
     if (e.target.id.includes('add-book-btn')) {
-      addBookForm();
+      addBookForm(uid);
     }
 
     // TODO: CLICK EVENT EDITING/UPDATING A BOOK
@@ -49,20 +49,24 @@ const domEvents = () => {
       // eslint-disable-next-line no-alert
       if (window.confirm('Want to delete?')) {
       //  console.warn('DELETE AUTHOR', e.target.id);
-        const [, firebaseKey] = (e.target.id.split('--'));
-        deleteAuthorBooks(firebaseKey).then(showAuthors);
+        const [, firebaseKey] = e.target.id.split('--');
+        deleteAuthorBooks(firebaseKey).then(() => {
+          getAuthors(uid).then((authorsArray) => {
+            showAuthors(authorsArray);
+          });
+        });
       }
     }
 
     // FIXME: ADD CLICK EVENT FOR SHOWING FORM FOR ADDING AN AUTHOR
     if (e.target.id.includes('add-author-btn')) {
-      addAuthorForm();
+      addAuthorForm(uid);
     }
 
     // FIXME: ADD CLICK EVENT FOR EDITING AN AUTHOR
     if (e.target.id.includes('update-author')) {
       const [, firebaseKey] = e.target.id.split('--');
-      getSingleAuthor(firebaseKey).then((authorObj) => addAuthorForm(authorObj));
+      getSingleAuthor(firebaseKey).then((authorObj) => addAuthorForm(uid, authorObj));
     }
   });
 };
